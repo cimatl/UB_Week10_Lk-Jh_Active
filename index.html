@@ -80,18 +80,26 @@
     <input id="members" type="text" placeholder="Member names" />
 
     <h3>Choose Core Text</h3>
-    <select id="coreText" onchange="loadQuestions()">
-      <option value="">Select text</option>
-      <option value="T1 — Luke 4:16–30">T1 — Luke 4:16–30 — Programmatic mission</option>
-      <option value="T2 — Luke 9:51–62">T2 — Luke 9:51–62 — Set face / direction</option>
-      <option value="T3 — Luke 10:25–37">T3 — Luke 10:25–37 — Neighbor redefined</option>
-      <option value="T4 — Luke 15:11–32">T4 — Luke 15:11–32 — The Parable of the Two Sons</option>
-      <option value="T5 — Luke 24:13–35">T5 — Luke 24:13–35 — Emmaus recognition</option>
-      <option value="F1 — John 1:1–18">F1 — John 1:1–18 — Word became flesh</option>
-      <option value="F2 — John 3:1–21">F2 — John 3:1–21 — New birth</option>
-      <option value="F3 — John 4:1–42">F3 — John 4:1–42 — Samaritan woman</option>
-      <option value="F4 — John 9:1–41">F4 — John 9:1–41 — Blind man sees</option>
-      <option value="F5 — John 20:19–31">F5 — John 20:19–31 — Thomas and witness</option>
+
+<h4>Tuesday (Luke)</h4>
+<select id="coreTextTues" onchange="selectText('tues')">
+  <option value="">Select Tuesday text</option>
+  <option value="T1 — Luke 4:16–30">T1 — Luke 4:16–30</option>
+  <option value="T2 — Luke 9:51–62">T2 — Luke 9:51–62</option>
+  <option value="T3 — Luke 10:25–37">T3 — Luke 10:25–37</option>
+  <option value="T4 — Luke 15:11–32">T4 — Luke 15:11–32</option>
+  <option value="T5 — Luke 24:13–35">T5 — Luke 24:13–35</option>
+</select>
+
+<h4>Friday (John)</h4>
+<select id="coreTextFri" onchange="selectText('fri')">
+  <option value="">Select Friday text</option>
+  <option value="F1 — John 1:1–18">F1 — John 1:1–18</option>
+  <option value="F2 — John 3:1–21">F2 — John 3:1–21</option>
+  <option value="F3 — John 4:1–42">F3 — John 4:1–42</option>
+  <option value="F4 — John 9:1–41">F4 — John 9:1–41</option>
+  <option value="F5 — John 20:19–31">F5 — John 20:19–31</option>
+</select>
     </select>
 
     <h3 id="questionTitle">Questions</h3>
@@ -121,6 +129,19 @@
 <script>
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmAjWXAn0zy6yIdG-LqqdYazifIfXEjCmYvn8LX9DAkj_jDHZFWR8yq-4I5ZAw1oc/exec";
 
+  let selectedText = "";
+
+function selectText(day) {
+  if (day === "tues") {
+    selectedText = document.getElementById("coreTextTues").value;
+    document.getElementById("coreTextFri").value = "";
+  } else {
+    selectedText = document.getElementById("coreTextFri").value;
+    document.getElementById("coreTextTues").value = "";
+  }
+
+  loadQuestions();
+}
 const questions = {
   "T1 — Luke 4:16–30": [
     "How does Jesus define his mission in Luke 4:16–30?",
@@ -186,7 +207,7 @@ function showSection(id) {
 }
 
 function loadQuestions() {
-  const text = document.getElementById("coreText").value;
+  const text = selectedText;
   const q = questions[text];
   if (!q) return;
   document.getElementById("questionTitle").innerText =
@@ -202,7 +223,7 @@ async function submitWork() {
     studentName: document.getElementById("studentName").value.trim(),
     groupName: document.getElementById("groupName").value.trim(),
     members: document.getElementById("members").value.trim(),
-    coreText: document.getElementById("coreText").value.trim(),
+    coreText: selectedText.trim(),
     exeAnswer: document.getElementById("exeAnswer").value.trim(),
     herAnswer: document.getElementById("herAnswer").value.trim(),
     integrationAnswer: document.getElementById("integrationAnswer").value.trim()
